@@ -22,6 +22,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -87,11 +88,11 @@ public class FXML_MenuController implements Initializable {
     private TextField txtIdentificador;
     @FXML
     private TextField txtGradoNodo;
-    
+
     double xMouse;
     double yMouse;
     boolean seleccionado = false, mover = false;// seleccionado es para determinar si se selecciono un nodo, mover es el permiso para moverlo
-    boolean dobleLinea1=false, dobleLinea2=false;
+    boolean dobleLinea1 = false, dobleLinea2 = false;
     Node CirculoSeleccionado = null, CirculoSeleccionado2 = null;// representan los circulos para la creación de lineas
     Node NuevoCirculo = null; // nuevo ciculo que se crea
     Integer num = 0, cantidadNodosSeleccionados = 0, cantidadLineas = 0;
@@ -146,9 +147,8 @@ public class FXML_MenuController implements Initializable {
         yMouse = event.getY() - 25;
 
         if (CirculoSeleccionado != null) {
-            
+
             moverCirculo(CirculoSeleccionado);
-            
 
         }
 
@@ -187,40 +187,40 @@ public class FXML_MenuController implements Initializable {
                     );
                     AncPanel.getChildren().add(CirculoSeleccionado);
                 } else {
-                    Nodos n1=new Nodos();
+                    Nodos n1 = new Nodos();
                     Nodos n2 = new Nodos();
                     NuevaLinea.setId(String.valueOf(cantidadLineas));
                     for (int i = 0; i < ListaDeConexiones.size(); i++) {
                         if (ListaDeConexiones.get(i).getNodo().equals(CirculoSeleccionado)) {
                             ListaDeConexiones.get(i).getListaConexiones().add(NuevaLinea);
-                            n1=ListaDeConexiones.get(i);
+                            n1 = ListaDeConexiones.get(i);
                         }
                         if (ListaDeConexiones.get(i).getNodo().equals(CirculoSeleccionado2)) {
                             ListaDeConexiones.get(i).getListaConexiones().add(NuevaLinea);
-                            n2=ListaDeConexiones.get(i);
+                            n2 = ListaDeConexiones.get(i);
                         }
                     }
-                    
+
                     for (int i = 0; i < n1.getListaConexiones().size(); i++) {
                         for (int j = 0; j < n2.getListaConexiones().size(); j++) {
-                            if(n1.getListaConexiones().get(i).equals(n2.getListaConexiones().get(j))){
-                                if(dobleLinea1==false){
-                                    dobleLinea1=true;
+                            if (n1.getListaConexiones().get(i).equals(n2.getListaConexiones().get(j))) {
+                                if (dobleLinea1 == false) {
+                                    dobleLinea1 = true;
                                     continue;
                                 }
-                                if(dobleLinea1==true&& dobleLinea2==false){
-                                    dobleLinea2=true;
+                                if (dobleLinea1 == true && dobleLinea2 == false) {
+                                    dobleLinea2 = true;
                                 }
                             }
                         }
                     }
-                    
-                    if(dobleLinea1==true && dobleLinea2==true){
+
+                    if (dobleLinea1 == true && dobleLinea2 == true) {
                         NuevaLinea.setStroke(Paint.valueOf("#ff4444"));
                         NuevaLinea.setStrokeWidth(5);
-                        
+
                     }
-                    
+
                     AncPanel.getChildren().add(NuevaLinea);
                     AncPanel.getChildren().add(CirculoSeleccionado2);
                     AncPanel.getChildren().add(CirculoSeleccionado);
@@ -242,15 +242,15 @@ public class FXML_MenuController implements Initializable {
                 btnNuevaConexion.setSelected(false);
                 if (!AppContext.getInstance().get("peso").equals("")) {
                     int n = Integer.valueOf(AppContext.getInstance().get("peso").toString());
-                    if(mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())]==0){
-                    mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] = n;
-                    }else{
-                    mat[Integer.valueOf(CirculoSeleccionado.getId())][Integer.valueOf(CirculoSeleccionado2.getId())] = n;
+                    if (mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] == 0) {
+                        mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] = n;
+                    } else {
+                        mat[Integer.valueOf(CirculoSeleccionado.getId())][Integer.valueOf(CirculoSeleccionado2.getId())] = n;
                     }
                 }
             }
-            dobleLinea1=false;
-            dobleLinea2=false;
+            dobleLinea1 = false;
+            dobleLinea2 = false;
             CirculoSeleccionado = null;
 
         }
@@ -348,20 +348,30 @@ public class FXML_MenuController implements Initializable {
         public void handle(MouseEvent e) {
 
             if (seleccionado == false && !btnNuevoNodo.isSelected()) {
-                CirculoSeleccionado = e.getPickResult().getIntersectedNode();
+                while (CirculoSeleccionado == null) {
+                    CirculoSeleccionado = e.getPickResult().getIntersectedNode();
+                    if (CirculoSeleccionado.getStyleClass().toString().equals("text")) {
+                        CirculoSeleccionado = CirculoSeleccionado.getParent();
+                    }
+
+                    seleccionado = true;
+                    if (btnNuevaConexion.isSelected()) {
+
+                        CirculoSeleccionado = e.getPickResult().getIntersectedNode();
+                        if (CirculoSeleccionado.getStyleClass().toString().equals("text")) {
+                            CirculoSeleccionado = CirculoSeleccionado.getParent();
+                        }
+                        cantidadNodosSeleccionados++;
+                        btnNuevaConexion.setText("Conexión( " + cantidadNodosSeleccionados + " )");
+                        seleccionado = false;
+                    }
+                }
                 // el siguiente bloque es para visualizar la info de los nodos
                 txtIdentificador.setText("Nodo-> " + Letras[Integer.valueOf(CirculoSeleccionado.getId())]);
                 for (int i = 0; i < ListaDeConexiones.size(); i++) {
-                        if (ListaDeConexiones.get(i).getNodo().equals(CirculoSeleccionado)) {
-                            txtGradoNodo.setText(String.valueOf(ListaDeConexiones.get(i).getListaConexiones().size()));
-                        }
-                }
-                seleccionado = true;
-                if (btnNuevaConexion.isSelected()) {
-                    CirculoSeleccionado = e.getPickResult().getIntersectedNode();
-                    cantidadNodosSeleccionados++;
-                    btnNuevaConexion.setText("Conexión( " + cantidadNodosSeleccionados + " )");
-                    seleccionado = false;
+                    if (ListaDeConexiones.get(i).getNodo().equals(CirculoSeleccionado)) {
+                        txtGradoNodo.setText(String.valueOf(ListaDeConexiones.get(i).getListaConexiones().size()));
+                    }
                 }
             } else {
                 CirculoSeleccionado = null;
