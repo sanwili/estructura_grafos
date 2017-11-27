@@ -11,13 +11,18 @@ package controladores.logica;
  */
 public class Grafo {
      private TipoGrafo tipo;
-     private Vertice[] vertices;
+     private Nodo[] nodos;
      private int[][] matrizAdyacencia;
      
-     Grafo(TipoGrafo tipo, Vertice vertices){
+     public Grafo(TipoGrafo tipo, Nodo vertices){
          this.tipo = tipo;
-         this.vertices = new Vertice[15];
-         matrizAdyacencia = new int[15][15];
+         this.nodos = new Nodo[15];
+         this.matrizAdyacencia = new int[15][15];
+     }
+     public Grafo(){
+         this.tipo = null;
+         this.nodos = new Nodo[15];
+         this.matrizAdyacencia = new int[15][15];
      }
     /**
      * @return the tipo
@@ -30,7 +35,7 @@ public class Grafo {
     /**
      * @return the vertices
      */
-    public Vertice[] getVertices() {return vertices;}
+    public Nodo[] getNodos() {return nodos;}
     /**
      * @return the matrizAdyacencia
      */
@@ -44,14 +49,14 @@ public class Grafo {
      */
     public void actualizarListaAdyacencia()
         {
-            for(int i = 0; i<vertices.length; i++){
-                if(vertices[i] != null) {
-                    vertices[i].setListaAdyacencia(null);
-                    for (int j = 0; j < vertices.length; j++)
+            for(int i = 0; i<nodos.length; i++){
+                if(nodos[i] != null) {
+                    nodos[i].setListaAdyacencia(null);
+                    for (int j = 0; j < nodos.length; j++)
                     {
                         if (matrizAdyacencia[i][j] > 0)
                         {
-                            vertices[i].insertarListaAdyacencia(j, matrizAdyacencia[i][j]);
+                            nodos[i].insertarListaAdyacencia(j, matrizAdyacencia[i][j]);
                         }
 
                     }
@@ -65,11 +70,11 @@ public class Grafo {
         {
             matrizAdyacencia[f][c] = valor;
         }
-        public void conectarVertices(int origen, int destino, int costo)
+        public void conectarNodos(int origen, int destino, int costo)
         {
             if(costo >= 0) { 
-                vertices[origen].setGrado(vertices[origen].getGrado()+1);
-                vertices[destino].setGrado(vertices[origen].getGrado()+1);
+                nodos[origen].setGrado(nodos[origen].getGrado()+1);
+                nodos[destino].setGrado(nodos[origen].getGrado()+1);
                 if(tipo == TipoGrafo.DIRIGIDO) { 
                     matrizAdyacencia[origen][destino] = costo;
                 }
@@ -89,12 +94,12 @@ public class Grafo {
                 
             }
         }
-        public void crearVertice()
+        public void crearNodo()
         {
             boolean yaCreado = false;
             for(int i = 0; i<15 && !yaCreado; i++){
-                if(vertices[i] == null){
-                    vertices[i] = new Vertice(i, 0);
+                if(nodos[i] == null){
+                    nodos[i] = new Nodo(i, 0);
                     yaCreado = true;
                 }
             }
@@ -105,12 +110,12 @@ public class Grafo {
                 actualizarListaAdyacencia();
             }
         }
-        public void eliminarVertice(int vertice)
+        public void eliminarNodo(int vertice)
         {
             //Eliminar conexiones desde y hacia él .
-            for (int i = 0; i<vertices.length; i++)
+            for (int i = 0; i<nodos.length; i++)
             {
-                if(vertices[i] != null){
+                if(nodos[i] != null){
                     if(matrizAdyacencia[i][vertice] != 0)
                     {
                         matrizAdyacencia[i][vertice] = 0;
@@ -121,7 +126,7 @@ public class Grafo {
                     }
                 }
             }
-            vertices[vertice] = null;
+            nodos[vertice] = null;
             actualizarListaAdyacencia();
         }
 }

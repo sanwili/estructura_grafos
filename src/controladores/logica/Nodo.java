@@ -9,12 +9,12 @@ package controladores.logica;
  *
  * @author HP
  */
-public class Vertice {
+public class Nodo {
     private int letra;
     private int grado;
     private ListaAdyacencia listaAdyacencia;
     
-    public Vertice(int letra, int grado){
+    public Nodo(int letra, int grado){
         this.letra = letra;
         this.grado = grado;
         listaAdyacencia = null;
