@@ -105,6 +105,21 @@
                               </ImageView>
                            </graphic>
                         </ToggleButton>
+                        <ToggleButton fx:id="btnListaAdyacencia" contentDisplay="TOP" mnemonicParsing="false" onAction="#ObtenerListaAdyacencia" prefHeight="70.0" prefWidth="100.0" text="LIst. Adyacencia" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="tgControles2" />
+                           </toggleGroup>
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../imagenes/formulario.png" />
+                                 </image>
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </ImageView>
+                           </graphic>
+                        </ToggleButton>
                      </children>
                   </GridPane>
                </children>
@@ -231,7 +246,7 @@
                            </font>
                         </Label>
                         <TextField fx:id="txtIdentificador" editable="false" promptText="Identificador" GridPane.rowIndex="1" />
-                        <TextField fx:id="txtGradoNodo" editable="false" promptText="Grado Nodo" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtGradoNodo" editable="false" promptText="Grado del Nodo" GridPane.rowIndex="2" />
                         <TextField fx:id="txtDistanciaEntreNodos" promptText="Distancia a los Nodos Conectados" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <TextField fx:id="txtNodoConectados" promptText="Nodos Conectados" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
@@ -246,7 +261,7 @@
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <AnchorPane fx:id="AncPanel" layoutX="61.0" layoutY="14.0" maxHeight="450.0" minHeight="406.0" minWidth="421.0" onMouseMoved="#obtenerPosicionMouse" prefHeight="406.0" prefWidth="421.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <AnchorPane fx:id="AncPanel" layoutX="61.0" layoutY="14.0" maxHeight="450.0" minHeight="406.0" minWidth="421.0" onMouseClicked="#DesSeleccionar" onMouseMoved="#obtenerPosicionMouse" prefHeight="406.0" prefWidth="421.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                            </children>
                         </AnchorPane>
                   </content>

@@ -5,6 +5,7 @@
  */
 package vista;
 
+import com.sun.java.swing.plaf.windows.resources.windows;
 import controladores.AppContext;
 import controladores.Nodos;
 import controladores.logica.*;
@@ -38,6 +39,7 @@ import javafx.scene.shape.Line;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.Window;
 import javax.swing.JOptionPane;
 
 /**
@@ -90,7 +92,7 @@ public class FXML_MenuController implements Initializable {
     @FXML
     private ToggleGroup tgControles1;
     @FXML
-    private ToggleGroup btnListaAdyacencia;
+    private ToggleButton btnListaAdyacencia;
     @FXML
     private TextField txtIdentificador;
     @FXML
@@ -113,6 +115,7 @@ public class FXML_MenuController implements Initializable {
     int mat[][] = new int[15][15];
     char[] Letras = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ'};
     Grafo grafo = new Grafo();
+
     /**
      * Initializes the controller class.
      */
@@ -150,6 +153,23 @@ public class FXML_MenuController implements Initializable {
         if (mover) {
             cir.setLayoutX(xMouse);
             cir.setLayoutY(yMouse);
+        }
+    }
+
+    void AbrirModal(String direccion, Window owner) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(direccion));
+            Parent root = (Parent) fxmlLoader.load();
+            Stage stage = new Stage(StageStyle.UTILITY);
+
+            stage.initOwner(owner);
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.showAndWait();
+
+        } catch (Exception ex) {
+
+            System.err.println(ex);
         }
     }
 
@@ -246,30 +266,20 @@ public class FXML_MenuController implements Initializable {
                     AncPanel.getChildren().add(CirculoSeleccionado2);
                     AncPanel.getChildren().add(CirculoSeleccionado);
                 }
-                try {
-                    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/vista/FXML_Peso.fxml"));
-                    Parent root = (Parent) fxmlLoader.load();
-                    Stage stage = new Stage(StageStyle.UTILITY);
-                    stage.initOwner(btnNuevaConexion.getScene().getWindow());
-                    stage.setScene(new Scene(root));
-                    stage.initModality(Modality.WINDOW_MODAL);
-                    stage.showAndWait();
+                AbrirModal("/vista/FXML_Peso.fxml", btnNuevaConexion.getScene().getWindow());
 
-                } catch (Exception ex) {
-
-                    System.err.println(ex);
-                }
                 cantidadNodosSeleccionados = 0;
                 btnNuevaConexion.setSelected(false);
                 if (!AppContext.getInstance().get("peso").equals("")) {
                     int n = Integer.valueOf(AppContext.getInstance().get("peso").toString());
-                    if (mat[Integer.valueOf(CirculoSeleccionado.getId())][Integer.valueOf(CirculoSeleccionado2.getId())] == 0) {
-                        mat[Integer.valueOf(CirculoSeleccionado.getId())][Integer.valueOf(CirculoSeleccionado2.getId())] = n;
-                    } else {
+                    if (mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] == 0) {
                         mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] = n;
+                    } else {
+                        mat[Integer.valueOf(CirculoSeleccionado.getId())][Integer.valueOf(CirculoSeleccionado2.getId())] = n;
                     }
                 }
             }
+
             dobleLinea1 = false;
             dobleLinea2 = false;
             CirculoSeleccionado = null;
@@ -309,20 +319,21 @@ public class FXML_MenuController implements Initializable {
                         TextField t = new TextField(String.valueOf(Letras[i - 1]));
                         t.setMaxWidth(54);
                         t.setEditable(false);
-                        matriz.add(t, i, j);
+                        matriz.add(t, j, i);
                     } else if (i == 0 && j >= 1) {
                         TextField t = new TextField(String.valueOf(Letras[j - 1]));
                         t.setMaxWidth(54);
                         t.setEditable(false);
-                        matriz.add(t, i, j);
+                        matriz.add(t, j, i);
                     } else if (i >= 1 && j >= 1) {
-                        TextField t = new TextField(String.valueOf(grafo.getMatrizAdyacencia()[i - 1][j - 1]));
+                        TextField t = new TextField(String.valueOf(mat[i - 1][j - 1]));
                         t.setMaxWidth(54);
-                        matriz.add(t, i, j);
+                        matriz.add(t, j, i);
+
                     } else {
                         TextField t = new TextField("I/D");
                         t.setMaxWidth(54);
-                        matriz.add(t, i, j);
+                        matriz.add(t, j, i);
                     }
                 }
             }
@@ -370,8 +381,51 @@ public class FXML_MenuController implements Initializable {
     }
 
     @FXML
-    private void ObtenerListaAdyacencia(ActionEvent event) {
+    private void DesSeleccionar(MouseEvent event) {
+        txtDistanciaEntreNodos.clear();
+        txtGradoNodo.clear();
+        txtIdentificador.clear();
+        txtNodoConectados.clear();
+        CirculoSeleccionado = null;
+        txtDistanciaEntreNodos.setPromptText("Distancia a los Nodos Conectados");
+        txtGradoNodo.setPromptText("Grado del Nodo");
+        txtIdentificador.setPromptText("Identificador");
+        txtNodoConectados.setPromptText("Nodos Conectados");
+    }
 
+    @FXML
+    private void ObtenerListaAdyacencia(ActionEvent event) {
+        List<String> adya = new ArrayList<>();
+        if(CirculoSeleccionado==null){
+        for (int i = 0; i < num; i++) {
+            ListaAdyacencia aux = grafo.getNodos()[i].getListaAdyacencia();
+
+            while (aux != null) {
+                adya.add("Nodo: " + String.valueOf(Letras[i]) + " -> "
+                        + String.valueOf(Letras[aux.getArista()]) + " / "
+                        + String.valueOf(aux.getCosto()));
+                aux = aux.getSig();
+            }
+        }
+        }else{
+            ListaAdyacencia aux = grafo.getNodos()[Integer.valueOf(CirculoSeleccionado.getId())].getListaAdyacencia();
+
+            while (aux != null) {
+                adya.add("Nodo: " + String.valueOf(Letras[Integer.valueOf(CirculoSeleccionado.getId())]) + " -> "
+                        + String.valueOf(Letras[aux.getArista()]) + " / "
+                        + String.valueOf(aux.getCosto()));
+                aux = aux.getSig();
+            }
+        }
+        if(!adya.isEmpty()){
+        AppContext.getInstance().set("lista", adya);
+
+        AbrirModal("/vista/FXML_ListaAdyacencia.fxml", btnListaAdyacencia.getScene().getWindow());
+        }else{
+        
+            new Alert(Alert.AlertType.ERROR, "No tiene nodos para poder realizar esta accioón.", ButtonType.OK).showAndWait();
+        }
+        btnListaAdyacencia.setSelected(false);
     }
 
     EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
@@ -401,11 +455,11 @@ public class FXML_MenuController implements Initializable {
                 txtIdentificador.setText("Nodo-> " + Letras[Integer.valueOf(CirculoSeleccionado.getId())]);
                 for (int i = 0; i < ListaDeConexiones.size(); i++) {
                     if (ListaDeConexiones.get(i).getNodo().equals(CirculoSeleccionado)) {
-                        if(ListaDeConexiones.get(i).isLazo()){
-                        txtGradoNodo.setText(String.valueOf("Grado-> " + (ListaDeConexiones.get(i).getListaConexiones().size()+2)));
-                        }else{
-                        
-                        txtGradoNodo.setText(String.valueOf("Grado-> " + ListaDeConexiones.get(i).getListaConexiones().size()));
+                        if (ListaDeConexiones.get(i).isLazo()) {
+                            txtGradoNodo.setText(String.valueOf("Grado-> " + (ListaDeConexiones.get(i).getListaConexiones().size() + 2)));
+                        } else {
+
+                            txtGradoNodo.setText(String.valueOf("Grado-> " + ListaDeConexiones.get(i).getListaConexiones().size()));
                         }
                     }
                 }
@@ -426,17 +480,17 @@ public class FXML_MenuController implements Initializable {
                             if (i != ListaDeConexiones.size() - 1) {
                                 elimino = true;
                             }
-                            ListaEliminar=ListaDeConexiones.get(i).getListaConexiones();
+                            ListaEliminar = ListaDeConexiones.get(i).getListaConexiones();
                             for (int j = 0; j < ListaDeConexiones.get(i).getListaConexiones().size(); j++) {
-                                
+
                                 AncPanel.getChildren().remove(ListaDeConexiones.get(i).getListaConexiones().get(j));
-                                
+
                             }
                             ListaDeConexiones.remove(i);
-                            for(int y=0;y < ListaDeConexiones.size(); y++) {
-                                for(int a=0;a< ListaDeConexiones.get(y).getListaConexiones().size();a++){
-                                    if(ListaDeConexiones.get(y).getListaConexiones().get(a).getId().equals(ListaEliminar.get(a).getId())){
-                                    ListaDeConexiones.get(y).getListaConexiones().remove(a);
+                            for (int y = 0; y < ListaDeConexiones.size(); y++) {
+                                for (int a = 0; a < ListaDeConexiones.get(y).getListaConexiones().size(); a++) {
+                                    if (ListaDeConexiones.get(y).getListaConexiones().get(a).getId().equals(ListaEliminar.get(a).getId())) {
+                                        ListaDeConexiones.get(y).getListaConexiones().remove(a);
                                     }
                                 }
                             }
@@ -448,29 +502,34 @@ public class FXML_MenuController implements Initializable {
                             for (int j = 0; j <= num + 1; j++) {
                                 // correr la fila y la columna
                                 mat[j][i] = 0;
-                            }                            
+                            }
                         }
                         if (elimino) {
                             ListaDeConexiones.get(i).getNodo().setId(String.valueOf(i));
                             Button.class.cast(ListaDeConexiones.get(i).getNodo()).setText(String.valueOf(Letras[i]));
                             for (int x = 0; x <= num + 1; x++) {
                                 mat[i][x] = mat[i + 1][x];
-                                mat[i+1][x] = 0;
+                                mat[i + 1][x] = 0;
                             }
                             for (int j = 0; j <= num + 1; j++) {
-                                
+
                                 mat[j][i] = mat[j][i + 1];
-                                mat[j][i+1] = 0;
+                                mat[j][i + 1] = 0;
                             }
                         }
                     }
                     AncPanel.getChildren().remove(CirculoSeleccionado);
                     num--;
+                    elimino = false;
                     grafo.setMatrizAdyacencia(mat);
                     grafo.actualizarListaAdyacencia();
                 }
             } else {
                 CirculoSeleccionado = null;
+                txtDistanciaEntreNodos.setPromptText("Distancia a los Nodos Conectados");
+                txtGradoNodo.setPromptText("Grado del Nodo");
+                txtIdentificador.setPromptText("Identificador");
+                txtNodoConectados.setPromptText("Nodos Conectados");
                 seleccionado = false;
                 btnNuevoNodo.setSelected(false);
                 if (!btnMover.isSelected()) {
