@@ -7,6 +7,7 @@ package vista;
 
 import controladores.AppContext;
 import controladores.Nodos;
+import controladores.logica.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -111,7 +112,7 @@ public class FXML_MenuController implements Initializable {
     List<Node> ListaEliminar = new ArrayList<>();
     int mat[][] = new int[15][15];
     char[] Letras = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ'};
-
+    Grafo grafo = new Grafo();
     /**
      * Initializes the controller class.
      */
@@ -272,6 +273,8 @@ public class FXML_MenuController implements Initializable {
             dobleLinea1 = false;
             dobleLinea2 = false;
             CirculoSeleccionado = null;
+            grafo.setMatrizAdyacencia(mat);
+            grafo.actualizarListaAdyacencia();
         }
         // termina grafos dirigidos
         //empieza grafos No dirigidos
@@ -313,7 +316,7 @@ public class FXML_MenuController implements Initializable {
                         t.setEditable(false);
                         matriz.add(t, i, j);
                     } else if (i >= 1 && j >= 1) {
-                        TextField t = new TextField(String.valueOf(mat[i - 1][j - 1]));
+                        TextField t = new TextField(String.valueOf(grafo.getMatrizAdyacencia()[i - 1][j - 1]));
                         t.setMaxWidth(54);
                         matriz.add(t, i, j);
                     } else {
@@ -362,7 +365,8 @@ public class FXML_MenuController implements Initializable {
             btnNuevoNodo.setDisable(true);
             new Alert(Alert.AlertType.WARNING, "Se supero el número de nodos permitidos.", ButtonType.OK).showAndWait();
         }
-
+        grafo.crearNodo();
+        grafo.actualizarListaAdyacencia();
     }
 
     @FXML
@@ -462,7 +466,8 @@ public class FXML_MenuController implements Initializable {
                     }
                     AncPanel.getChildren().remove(CirculoSeleccionado);
                     num--;
-
+                    grafo.setMatrizAdyacencia(mat);
+                    grafo.actualizarListaAdyacencia();
                 }
             } else {
                 CirculoSeleccionado = null;
@@ -471,9 +476,7 @@ public class FXML_MenuController implements Initializable {
                 if (!btnMover.isSelected()) {
                     mover = false;
                 }
-
             }
-
         }
     };
 
