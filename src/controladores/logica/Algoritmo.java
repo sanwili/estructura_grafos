@@ -5,16 +5,18 @@
  */
 package controladores.logica;
 
-import com.sun.xml.internal.fastinfoset.algorithm.IntegerEncodingAlgorithm;
+
 import java.util.ArrayList;
+import java.util.EmptyStackException;
 import java.util.List;
+import java.util.Stack;
 
 /**
  *
  * @author HP
  */
 public class Algoritmo {
-    List<Integer> pila;
+    Stack<Integer> pila= new Stack<Integer>();
     List<Integer> listaResultadoDijkstra;
     int[][] matrizFloydRecorrido;
     int[][] matrizFloydDistancia;
@@ -26,7 +28,7 @@ public class Algoritmo {
     int[] nodos;
     
     public Algoritmo(){
-        pila = new ArrayList<Integer>();
+        pila = new Stack<Integer>();
         listaResultadoDijkstra = new ArrayList<Integer>();
         peso = 0;
         matrizFloydRecorrido = new int[15][15];
@@ -36,44 +38,52 @@ public class Algoritmo {
         pesoPrim = new int[15];
         nodos = new int[15];
     }
+    
+    public List<Integer>getListaResultadoDijkstra(){
+        return listaResultadoDijkstra;
+    }
     public void limpiar(){
-        pila = new ArrayList<Integer>();
+        pila = new Stack<Integer>();
         listaResultadoDijkstra = new ArrayList<Integer>();
         peso = 0;
         matrizFloydRecorrido = new int[15][15];
         matrizFloydDistancia = new int[15][15];
     }
     public void dijkstraCorto(int[][] matrizAdyacencia, int ini, int fin, int x){
-        //Corto por pesos.
-        boolean bandera = false;
-        bandera = pila.contains(ini);
-        if(!bandera){
-            if(ini == fin){
-                if(x < peso){
-                    List<Integer> temp = new ArrayList<Integer>();
-                    peso = x;
-                    while(!pila.isEmpty()){
-                        Integer numAux = pila.get(pila.size()-1);
-                        temp.add(numAux);
-                        pila.remove(numAux);
+        try{
+            //Corto por pesos.
+            boolean bandera = false;
+            bandera = pila.contains(ini);
+            pila.push(ini);
+            if(!bandera){
+                if(ini == fin){
+                    if(x < peso){
+                        Stack<Integer> temp = new Stack<Integer>();
+                        peso = x;
+                        while(!pila.empty()){
+                            Integer numAux = pila.pop();
+                            temp.push(numAux);
+                        }
+                        while(!temp.empty()){
+                            Integer numAux = temp.pop();
+                            pila.push(numAux);
+                            listaResultadoDijkstra.add(numAux);
+                        }
                     }
-                    while(!pila.isEmpty()){
-                        Integer numAux = temp.get(temp.size()-1);
-                        pila.add(numAux);
-                        temp.remove(numAux);
-                        listaResultadoDijkstra.add(numAux);
+                }
+                else{
+                    for (int i = 0; i < matrizAdyacencia.length; i++) {
+                        if (matrizAdyacencia[ini][i] > 0) {
+                            dijkstraCorto(matrizAdyacencia, i, fin, x + matrizAdyacencia[ini][i]);
+                        }
                     }
                 }
             }
-            else{
-                for (int i = 0; i < matrizAdyacencia.length; i++) {
-                    if (matrizAdyacencia[ini][i] > 0) {
-                        dijkstraCorto(matrizAdyacencia, i, fin, x + matrizAdyacencia[ini][i]);
-                    }
-                }
-            }
+            pila.pop();
         }
-        pila.remove(pila.size()-1);
+        catch(EmptyStackException ex){
+            
+        }
     }
     public void floyd(int[][] matrizAdyacencia){
         //matriz de recorrido

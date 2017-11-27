@@ -115,7 +115,7 @@ public class FXML_MenuController implements Initializable {
     int mat[][] = new int[15][15];
     char[] Letras = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ'};
     Grafo grafo = new Grafo();
-
+    Algoritmo algoritmo = new Algoritmo();
     /**
      * Initializes the controller class.
      */
@@ -130,6 +130,11 @@ public class FXML_MenuController implements Initializable {
 
     @FXML
     private void activarDiskstra(ActionEvent event) {
+        algoritmo.limpiar();
+        algoritmo.dijkstraCorto(mat, 0, 2, Integer.MAX_VALUE);
+        for(int i = 0; i<algoritmo.getListaResultadoDijkstra().size();i++){
+            System.out.println(algoritmo.getListaResultadoDijkstra().get(i));
+        }
     }
 
     @FXML
