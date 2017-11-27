@@ -63,6 +63,10 @@ public class FXML_MenuController implements Initializable {
     @FXML
     private GridPane gridInformación;
     @FXML
+    private GridPane gridAlgoritmos;
+    @FXML
+    private GridPane gridControles;
+    @FXML
     private TabPane tabPantallas;
     @FXML
     private Tab tabGrafo;
@@ -85,6 +89,8 @@ public class FXML_MenuController implements Initializable {
     @FXML
     private ToggleGroup tgControles1;
     @FXML
+    private ToggleGroup btnListaAdyacencia;
+    @FXML
     private TextField txtIdentificador;
     @FXML
     private TextField txtGradoNodo;
@@ -102,6 +108,7 @@ public class FXML_MenuController implements Initializable {
     Integer num = 0, num2 = 0, cantidadNodosSeleccionados = 0, cantidadLineas = 0;
     Line NuevaLinea = null;// nueva linea que se crea
     List<Nodos> ListaDeConexiones = new ArrayList<>();
+    List<Node> ListaEliminar = new ArrayList<>();
     int mat[][] = new int[15][15];
     char[] Letras = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'Ñ'};
 
@@ -288,6 +295,8 @@ public class FXML_MenuController implements Initializable {
         if (tabMatriz.isSelected()) {
             AncMatriz.getChildren().clear();
             gridInformación.setVisible(false);
+            gridControles.setDisable(true);
+            gridAlgoritmos.setDisable(true);
 
             GridPane matriz = new GridPane();
 
@@ -317,6 +326,8 @@ public class FXML_MenuController implements Initializable {
             AncMatriz.getChildren().add(matriz);
         } else {
             gridInformación.setVisible(true);
+            gridControles.setDisable(false);
+            gridAlgoritmos.setDisable(false);
         }
 
     }
@@ -355,7 +366,7 @@ public class FXML_MenuController implements Initializable {
     }
 
     @FXML
-    private void eiminarObjeto(ActionEvent event) {
+    private void ObtenerListaAdyacencia(ActionEvent event) {
 
     }
 
@@ -386,7 +397,12 @@ public class FXML_MenuController implements Initializable {
                 txtIdentificador.setText("Nodo-> " + Letras[Integer.valueOf(CirculoSeleccionado.getId())]);
                 for (int i = 0; i < ListaDeConexiones.size(); i++) {
                     if (ListaDeConexiones.get(i).getNodo().equals(CirculoSeleccionado)) {
+                        if(ListaDeConexiones.get(i).isLazo()){
+                        txtGradoNodo.setText(String.valueOf("Grado-> " + (ListaDeConexiones.get(i).getListaConexiones().size()+2)));
+                        }else{
+                        
                         txtGradoNodo.setText(String.valueOf("Grado-> " + ListaDeConexiones.get(i).getListaConexiones().size()));
+                        }
                     }
                 }
                 txtNodoConectados.clear();
@@ -406,19 +422,41 @@ public class FXML_MenuController implements Initializable {
                             if (i != ListaDeConexiones.size() - 1) {
                                 elimino = true;
                             }
+                            ListaEliminar=ListaDeConexiones.get(i).getListaConexiones();
                             for (int j = 0; j < ListaDeConexiones.get(i).getListaConexiones().size(); j++) {
+                                
                                 AncPanel.getChildren().remove(ListaDeConexiones.get(i).getListaConexiones().get(j));
-
+                                
                             }
                             ListaDeConexiones.remove(i);
-
+                            for(int y=0;y < ListaDeConexiones.size(); y++) {
+                                for(int a=0;a< ListaDeConexiones.get(y).getListaConexiones().size();a++){
+                                    if(ListaDeConexiones.get(y).getListaConexiones().get(a).getId().equals(ListaEliminar.get(a).getId())){
+                                    ListaDeConexiones.get(y).getListaConexiones().remove(a);
+                                    }
+                                }
+                            }
+                            ListaEliminar.clear();
+                            // se convierte la fila y columna en 0
+                            for (int x = 0; x <= num + 1; x++) {
+                                mat[i][x] = 0;
+                            }
+                            for (int j = 0; j <= num + 1; j++) {
+                                // correr la fila y la columna
+                                mat[j][i] = 0;
+                            }                            
                         }
                         if (elimino) {
+                            ListaDeConexiones.get(i).getNodo().setId(String.valueOf(i));
                             Button.class.cast(ListaDeConexiones.get(i).getNodo()).setText(String.valueOf(Letras[i]));
-                            for (int x = 0; x <= num; x++) {
-                                for (int j = 0; j <= num; j++) {
-                                // correr la fila y la columna
-                                }
+                            for (int x = 0; x <= num + 1; x++) {
+                                mat[i][x] = mat[i + 1][x];
+                                mat[i+1][x] = 0;
+                            }
+                            for (int j = 0; j <= num + 1; j++) {
+                                
+                                mat[j][i] = mat[j][i + 1];
+                                mat[j][i+1] = 0;
                             }
                         }
                     }
