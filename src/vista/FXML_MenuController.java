@@ -89,7 +89,7 @@ public class FXML_MenuController implements Initializable {
     @FXML
     private ToggleGroup tgControles1;
     @FXML
-    private ToggleGroup btnListaAdyacencia;
+    private ToggleButton btnListaAdyacencia;
     @FXML
     private TextField txtIdentificador;
     @FXML

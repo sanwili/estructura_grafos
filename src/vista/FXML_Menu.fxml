@@ -105,6 +105,21 @@
                               </ImageView>
                            </graphic>
                         </ToggleButton>
+                        <ToggleButton fx:id="btnListaAdyacencia" contentDisplay="TOP" mnemonicParsing="false" onAction="#ObtenerListaAdyacencia" prefHeight="70.0" prefWidth="100.0" text="LIst. Adyacencia" GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="tgControles2" />
+                           </toggleGroup>
+                           <graphic>
+                              <ImageView fitHeight="40.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../imagenes/formulario.png" />
+                                 </image>
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </ImageView>
+                           </graphic>
+                        </ToggleButton>
                      </children>
                   </GridPane>
                </children>
