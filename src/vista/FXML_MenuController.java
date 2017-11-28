@@ -146,6 +146,18 @@ public class FXML_MenuController implements Initializable {
 
     }
 
+    private void CambiarNodosVerdes(Node n) throws InterruptedException {
+        n.setStyle("-fx-background-radius: 50em; "
+                + "-fx-min-width: 50px; "
+                + "-fx-min-height: 50px; "
+                + "-fx-max-width: 50px; "
+                + "-fx-max-height: 50px;"
+                + "-fx-background-color:#61b13c;"
+                + "-fx-font: 150% sans-serif;"
+        );
+
+    }
+
     @FXML
     private void activarFloyd(ActionEvent event) {
     }
@@ -159,8 +171,46 @@ public class FXML_MenuController implements Initializable {
     }
 
     @FXML
-    private void movercirculo(MouseEvent event) {
+    private void hacerNoDirigido(ActionEvent event) throws InterruptedException {
+        CirculoSeleccionado = null;
+        CirculoSeleccionado2 = null;
+        nodo1 = 0;
+        nodo2 = 0;
+        NuevaLinea = null;
 
+        for (int i = 0; i < ListaDeConexiones.size(); i++) {
+            for (int j = 1; j < ListaDeConexiones.size(); j++) {
+
+                CirculoSeleccionado = ListaDeConexiones.get(i).getNodo();
+                nodo1 = i;
+
+                CirculoSeleccionado2 = ListaDeConexiones.get(j).getNodo();
+                nodo2 = j;
+                boolean salir=false;
+                for (int a = 0; a < (ListaDeConexiones.get(nodo1).getListaConexiones().size()); a++) {
+                    for (int b = 0; b < (ListaDeConexiones.get(nodo2).getListaConexiones().size()); b++) {
+                        if (!ListaDeConexiones.get(nodo1).getListaConexiones().isEmpty() && !ListaDeConexiones.get(nodo2).getListaConexiones().isEmpty()) {
+                            if (ListaDeConexiones.get(nodo1).getListaConexiones().get(a).getId().equals(ListaDeConexiones.get(nodo2).getListaConexiones().get(b).getId())) {
+                                NuevaLinea = (Line) ListaDeConexiones.get(nodo2).getListaConexiones().get(b);
+                                if( mat[nodo2][nodo1]==0){
+                                mat[nodo2][nodo1] = mat[nodo1][nodo2];
+                                }else{
+                                mat[nodo1][nodo2]=mat[nodo2][nodo1];
+                                }
+                            }
+                        }
+                    }
+                }
+
+                NuevaLinea.setStroke(Paint.valueOf("#ff4444"));
+
+            }
+        }
+        CirculoSeleccionado = null;
+        CirculoSeleccionado2 = null;
+        nodo1 = 0;
+        nodo2 = 0;
+        NuevaLinea = null;
     }
 
     void moverCirculo(Node cir) {
@@ -187,18 +237,6 @@ public class FXML_MenuController implements Initializable {
         }
     }
 
-    private void CambiarNodosVerdes(Node n) throws InterruptedException {
-        n.setStyle("-fx-background-radius: 50em; "
-                + "-fx-min-width: 50px; "
-                + "-fx-min-height: 50px; "
-                + "-fx-max-width: 50px; "
-                + "-fx-max-height: 50px;"
-                + "-fx-background-color:#61b13c;"
-                + "-fx-font: 150% sans-serif;"
-        );
-
-    }
-
     @FXML
     private void obtenerPosicionMouse(MouseEvent event) throws InterruptedException {
         xMouse = event.getX() - 25;
@@ -218,8 +256,8 @@ public class FXML_MenuController implements Initializable {
             CirculoSeleccionado.addEventFilter(MouseEvent.MOUSE_PRESSED, eventHandler);
         }
 
-        if (btnNuevaConexion.isSelected() && cantidadNodosSeleccionados < 3 && CirculoSeleccionado != null ) {
-            if (cantidadNodosSeleccionados == 1 ) {
+        if (btnNuevaConexion.isSelected() && cantidadNodosSeleccionados < 3 && CirculoSeleccionado != null) {
+            if (cantidadNodosSeleccionados == 1) {
                 NuevaLinea = new Line();
                 NuevaLinea.setFill(Paint.valueOf("#000000"));
                 NuevaLinea.setStrokeWidth(4);
@@ -229,14 +267,14 @@ public class FXML_MenuController implements Initializable {
                 NuevaLinea.startYProperty().bind(CirculoSeleccionado.layoutYProperty().add(25));
                 CirculoSeleccionado2 = CirculoSeleccionado;
             }
-           
+
             if (cantidadNodosSeleccionados == 2) {
 
                 NuevaLinea.endXProperty().bind(CirculoSeleccionado.layoutXProperty().add(25));
                 NuevaLinea.endYProperty().bind(CirculoSeleccionado.layoutYProperty().add(25));
                 AncPanel.getChildren().remove(CirculoSeleccionado2);
                 AncPanel.getChildren().remove(CirculoSeleccionado);
-                if (CirculoSeleccionado.equals(CirculoSeleccionado2)  ) {
+                if (CirculoSeleccionado.equals(CirculoSeleccionado2)) {
 
                     for (int i = 0; i < ListaDeConexiones.size(); i++) {
                         if (ListaDeConexiones.get(i).getNodo().equals(CirculoSeleccionado)) {
@@ -284,9 +322,9 @@ public class FXML_MenuController implements Initializable {
                             }
                         }
                     }
-                    if(rdbNoDirigido.isSelected()){
-                    dobleLinea1=true;
-                    dobleLinea2=true;
+                    if (rdbNoDirigido.isSelected()) {
+                        dobleLinea1 = true;
+                        dobleLinea2 = true;
                     }
 
                     if (dobleLinea1 == true && dobleLinea2 == true) {
@@ -323,9 +361,13 @@ public class FXML_MenuController implements Initializable {
                 btnNuevaConexion.setSelected(false);
                 if (!AppContext.getInstance().get("peso").equals("")) {
                     int n = Integer.valueOf(AppContext.getInstance().get("peso").toString());
-                    if (mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] == 0) {
+                    if (mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] == 0 && rdbDirigido.isSelected()) {
                         mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] = n;
                     } else {
+                        mat[Integer.valueOf(CirculoSeleccionado.getId())][Integer.valueOf(CirculoSeleccionado2.getId())] = n;
+                    }
+                    if (mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] == 0 && rdbNoDirigido.isSelected()) {
+                        mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] = n;
                         mat[Integer.valueOf(CirculoSeleccionado.getId())][Integer.valueOf(CirculoSeleccionado2.getId())] = n;
                     }
                 }
@@ -506,15 +548,30 @@ public class FXML_MenuController implements Initializable {
     @FXML
     private void DesSeleccionar(MouseEvent event) {
         if (CirculoSeleccionado != null) {
-            CirculoSeleccionado.setStyle(
-                    "-fx-background-radius: 50em; "
-                    + "-fx-min-width: 50px; "
-                    + "-fx-min-height: 50px; "
-                    + "-fx-max-width: 50px; "
-                    + "-fx-max-height: 50px;"
-                    + "-fx-background-color:#3c7fb1;"
-                    + "-fx-font: 250% sans-serif;"
-            );
+            for (int i = 0; i < ListaDeConexiones.size(); i++) {
+                if (ListaDeConexiones.get(i).getNodo().getId().equals(CirculoSeleccionado.getId()) && ListaDeConexiones.get(i).isLazo()) {
+                    CirculoSeleccionado.setStyle(
+                            "-fx-background-radius: 50em; "
+                            + "-fx-min-width: 50px; "
+                            + "-fx-min-height: 50px; "
+                            + "-fx-max-width: 50px; "
+                            + "-fx-max-height: 50px;"
+                            + "-fx-background-color:#91b13c;"
+                            + "-fx-font: 250% sans-serif;"
+                    );
+                } else {
+                    CirculoSeleccionado.setStyle(
+                            "-fx-background-radius: 50em; "
+                            + "-fx-min-width: 50px; "
+                            + "-fx-min-height: 50px; "
+                            + "-fx-max-width: 50px; "
+                            + "-fx-max-height: 50px;"
+                            + "-fx-background-color:#3c7fb1;"
+                            + "-fx-font: 250% sans-serif;"
+                    );
+                }
+            }
+
             txtDistanciaEntreNodos.clear();
             txtGradoNodo.clear();
             txtIdentificador.clear();
@@ -600,10 +657,20 @@ public class FXML_MenuController implements Initializable {
                 for (int i = 0; i < ListaDeConexiones.size(); i++) {
                     if (ListaDeConexiones.get(i).getNodo().equals(CirculoSeleccionado)) {
                         if (ListaDeConexiones.get(i).isLazo()) {
-                            txtGradoNodo.setText(String.valueOf("Grado-> " + (ListaDeConexiones.get(i).getListaConexiones().size() + 2)));
+                            if (rdbDirigido.isSelected()) {
+                                txtGradoNodo.setText(String.valueOf("Grado-> " + (ListaDeConexiones.get(i).getListaConexiones().size() + 2)));
+                            }
+                            if (rdbNoDirigido.isSelected()) {
+                                txtGradoNodo.setText(String.valueOf("Grado-> " + ((ListaDeConexiones.get(i).getListaConexiones().size() * 2) + 2)));
+                            }
                         } else {
+                            if (rdbDirigido.isSelected()) {
+                                txtGradoNodo.setText(String.valueOf("Grado-> " + ListaDeConexiones.get(i).getListaConexiones().size()));
+                            }
+                            if (rdbNoDirigido.isSelected()) {
+                                txtGradoNodo.setText(String.valueOf("Grado-> " + ListaDeConexiones.get(i).getListaConexiones().size() * 2));
+                            }
 
-                            txtGradoNodo.setText(String.valueOf("Grado-> " + ListaDeConexiones.get(i).getListaConexiones().size()));
                         }
                     }
                 }
@@ -670,15 +737,30 @@ public class FXML_MenuController implements Initializable {
                 }
             } else {
                 if (CirculoSeleccionado != null) {
-                    CirculoSeleccionado.setStyle(
-                            "-fx-background-radius: 50em; "
-                            + "-fx-min-width: 50px; "
-                            + "-fx-min-height: 50px; "
-                            + "-fx-max-width: 50px; "
-                            + "-fx-max-height: 50px;"
-                            + "-fx-background-color:#3c7fb1;"
-                            + "-fx-font: 250% sans-serif;"
-                    );
+                    for (int i = 0; i < ListaDeConexiones.size(); i++) {
+                        if (ListaDeConexiones.get(i).getNodo().getId().equals(CirculoSeleccionado.getId()) && ListaDeConexiones.get(i).isLazo()) {
+                            CirculoSeleccionado.setStyle(
+                                    "-fx-background-radius: 50em; "
+                                    + "-fx-min-width: 50px; "
+                                    + "-fx-min-height: 50px; "
+                                    + "-fx-max-width: 50px; "
+                                    + "-fx-max-height: 50px;"
+                                    + "-fx-background-color:#91b13c;"
+                                    + "-fx-font: 250% sans-serif;"
+                            );
+                        } else {
+                            CirculoSeleccionado.setStyle(
+                                    "-fx-background-radius: 50em; "
+                                    + "-fx-min-width: 50px; "
+                                    + "-fx-min-height: 50px; "
+                                    + "-fx-max-width: 50px; "
+                                    + "-fx-max-height: 50px;"
+                                    + "-fx-background-color:#3c7fb1;"
+                                    + "-fx-font: 250% sans-serif;"
+                            );
+                        }
+                    }
+
                 }
                 CirculoSeleccionado = null;
                 btnNuevoNodo.setDisable(false);
@@ -701,7 +783,7 @@ public class FXML_MenuController implements Initializable {
             if (btnEliminar.isSelected()) {
                 CirculoSeleccionado = null;
                 CirculoSeleccionado2 = null;
-                
+
                 lineaSeleccionada = e.getPickResult().getIntersectedNode();
                 for (int i = 0; i < ListaDeConexiones.size(); i++) {
                     for (int j = 0; j < ListaDeConexiones.get(i).getListaConexiones().size(); j++) {
@@ -711,16 +793,16 @@ public class FXML_MenuController implements Initializable {
                                 ListaDeConexiones.get(i).getListaConexiones().remove(j);
                                 continue;
                             }
-                            if (CirculoSeleccionado2 == null && CirculoSeleccionado!=null) {
+                            if (CirculoSeleccionado2 == null && CirculoSeleccionado != null) {
                                 CirculoSeleccionado2 = ListaDeConexiones.get(i).getNodo();
                                 ListaDeConexiones.get(i).getListaConexiones().remove(j);
                             }
-                            
+
                         }
                     }
                 }
-                mat[Integer.valueOf(CirculoSeleccionado.getId())][Integer.valueOf(CirculoSeleccionado2.getId())]=0;
-                mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())]=0;
+                mat[Integer.valueOf(CirculoSeleccionado.getId())][Integer.valueOf(CirculoSeleccionado2.getId())] = 0;
+                mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] = 0;
                 AncPanel.getChildren().remove(lineaSeleccionada);
             }
         }

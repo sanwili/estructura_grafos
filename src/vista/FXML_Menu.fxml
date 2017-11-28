@@ -208,7 +208,7 @@
                                           <ToggleGroup fx:id="tipoGrafo" />
                                        </toggleGroup>
                                     </RadioButton>
-                                    <RadioButton fx:id="rdbNoDirigido" mnemonicParsing="false" text="No Dirigido" toggleGroup="$tipoGrafo" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                                    <RadioButton fx:id="rdbNoDirigido" mnemonicParsing="false" onAction="#hacerNoDirigido" text="No Dirigido" toggleGroup="$tipoGrafo" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
                                        <GridPane.margin>
                                           <Insets />
                                        </GridPane.margin>
