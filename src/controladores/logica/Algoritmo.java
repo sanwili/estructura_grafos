@@ -53,7 +53,7 @@ public class Algoritmo {
         nodos = new int[15];
         saltos = 0;
     }
-
+    public int[] getNodosArbolMinimo(){return nodos;}
     public void dijkstraCorto(int[][] matrizAdyacencia, int ini, int fin, int xPeso, int xSaltos) {
         try {
             //Corto por pesos.
