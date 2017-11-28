@@ -240,12 +240,14 @@ public class Algoritmo {
         return minimo; //devuelve el nodo a seguir evaluando(el del mínimo peso).
     }
 
-    void arbolMinimo(int[][] mat, int cantidadNodos) {
+    public void arbolMinimo(int[][] mat, int cantidadNodos) {
+        
         //asignar valores por defecto.
         for (int i = 0; i < cantidadNodos; i++) {
             //Limpia cada linea de pesos y la bandera de evaluar a cada nodo.
             pesoPrim[i] = Integer.MAX_VALUE;
             evaluar[i] = false;
+            nodos[i] = 0;
         }
         //Siempre empezamos con A
         pesoPrim[0] = 0; //Esto permite que minimoPeso() entre en el primero. Con esto se le indica que debe empezar con el A.
@@ -264,7 +266,7 @@ public class Algoritmo {
                 }
             }
         }
-        ImprimeArbol(mat, cantidadNodos);
+      
     }
 
     void ImprimeArbol(int[][] matrizAdyacencia, int cantidadNodos) {

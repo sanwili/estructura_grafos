@@ -162,9 +162,9 @@ public class FXML_MenuController implements Initializable {
     @FXML
     private void activarFloyd(ActionEvent event) {
         ObtenerListaFloyd();
-        
+
     }
-    
+
     @FXML
     private void activarCaminaLargoAleatorio(ActionEvent event) {
         algoritmo.limpiar();
@@ -176,6 +176,62 @@ public class FXML_MenuController implements Initializable {
 
     @FXML
     private void activarArbolAbarcador(ActionEvent event) {
+        algoritmo.limpiar();
+        algoritmo.arbolMinimo(mat, num);
+        CirculoSeleccionado = null;
+        CirculoSeleccionado2 = null;
+        nodo1 = 0;
+        nodo2 = 0;
+        NuevaLinea = null;
+        for (int i = 1; i < num; i++) {
+
+            System.out.println(algoritmo.getNodosArbolMinimo()[i] + " " + i);
+
+        }
+        for (int i = 1; i < num; i++) {
+
+            CirculoSeleccionado = ListaDeConexiones.get(algoritmo.getNodosArbolMinimo()[i]).getNodo();
+            nodo1 = algoritmo.getNodosArbolMinimo()[i];
+
+            CirculoSeleccionado2 = ListaDeConexiones.get(i).getNodo();
+            nodo2 = i;
+            boolean salir = false;
+            for (int a = 0; a < (ListaDeConexiones.get(nodo1).getListaConexiones().size()); a++) {
+                for (int b = 0; b < (ListaDeConexiones.get(nodo2).getListaConexiones().size()); b++) {
+                    if (!ListaDeConexiones.get(nodo1).getListaConexiones().isEmpty() && !ListaDeConexiones.get(nodo2).getListaConexiones().isEmpty()) {
+                        if (ListaDeConexiones.get(nodo1).getListaConexiones().get(a).getId().equals(ListaDeConexiones.get(nodo2).getListaConexiones().get(b).getId())) {
+                            NuevaLinea = (Line) ListaDeConexiones.get(nodo2).getListaConexiones().get(b);
+
+                        }
+                    }
+                }
+            }
+
+            NuevaLinea.setStroke(Paint.valueOf("#29f2ab"));
+            CirculoSeleccionado.setStyle("-fx-background-radius: 50em; "
+                    + "-fx-min-width: 50px; "
+                    + "-fx-min-height: 50px; "
+                    + "-fx-max-width: 50px; "
+                    + "-fx-max-height: 50px;"
+                    + "-fx-background-color:#29f2ab;"
+                    + "-fx-font: 150% sans-serif;"
+            );
+            CirculoSeleccionado2.setStyle("-fx-background-radius: 50em; "
+                    + "-fx-min-width: 50px; "
+                    + "-fx-min-height: 50px; "
+                    + "-fx-max-width: 50px; "
+                    + "-fx-max-height: 50px;"
+                    + "-fx-background-color:#29f2ab;"
+                    + "-fx-font: 150% sans-serif;"
+            );
+
+        }
+        CirculoSeleccionado = null;
+        CirculoSeleccionado2 = null;
+        nodo1 = 0;
+        nodo2 = 0;
+        NuevaLinea = null;
+
     }
 
     @FXML
@@ -194,16 +250,16 @@ public class FXML_MenuController implements Initializable {
 
                 CirculoSeleccionado2 = ListaDeConexiones.get(j).getNodo();
                 nodo2 = j;
-                boolean salir=false;
+                boolean salir = false;
                 for (int a = 0; a < (ListaDeConexiones.get(nodo1).getListaConexiones().size()); a++) {
                     for (int b = 0; b < (ListaDeConexiones.get(nodo2).getListaConexiones().size()); b++) {
                         if (!ListaDeConexiones.get(nodo1).getListaConexiones().isEmpty() && !ListaDeConexiones.get(nodo2).getListaConexiones().isEmpty()) {
                             if (ListaDeConexiones.get(nodo1).getListaConexiones().get(a).getId().equals(ListaDeConexiones.get(nodo2).getListaConexiones().get(b).getId())) {
                                 NuevaLinea = (Line) ListaDeConexiones.get(nodo2).getListaConexiones().get(b);
-                                if( mat[nodo2][nodo1]==0){
-                                mat[nodo2][nodo1] = mat[nodo1][nodo2];
-                                }else{
-                                mat[nodo1][nodo2]=mat[nodo2][nodo1];
+                                if (mat[nodo2][nodo1] == 0) {
+                                    mat[nodo2][nodo1] = mat[nodo1][nodo2];
+                                } else {
+                                    mat[nodo1][nodo2] = mat[nodo2][nodo1];
                                 }
                             }
                         }
@@ -398,7 +454,7 @@ public class FXML_MenuController implements Initializable {
             }
             if (CirculoSeleccionado != null && CirculoSeleccionado2 != null) {
 
-                algoritmo.dijkstraCorto(mat, Integer.valueOf(CirculoSeleccionado2.getId()), Integer.valueOf(CirculoSeleccionado.getId()), Integer.MAX_VALUE,0);
+                algoritmo.dijkstraCorto(mat, Integer.valueOf(CirculoSeleccionado2.getId()), Integer.valueOf(CirculoSeleccionado.getId()), Integer.MAX_VALUE, 0);
                 CirculoSeleccionado = null;
                 CirculoSeleccionado2 = null;
                 nodo1 = 0;
@@ -632,20 +688,19 @@ public class FXML_MenuController implements Initializable {
         List<String> adya = new ArrayList<>();
         adya.add("Floyd (camino más corto)");
         algoritmo.limpiar();
-        algoritmo.floyd(mat,num);
-        for(int i = 0; i<num; i++){
+        algoritmo.floyd(mat, num);
+        for (int i = 0; i < num; i++) {
             adya.add("Nodo " + String.valueOf(Letras[i]));
-            for(int j = 0; j<num; j++){
+            for (int j = 0; j < num; j++) {
                 algoritmo.obtenerCaminoFloyd(i, j);
                 List<Integer> resultado = algoritmo.getCaminoFloyd();
                 String todoCamino = new String("");
                 adya.add("   Inicio: " + String.valueOf(Letras[i]) + "  Final: " + String.valueOf(Letras[j]));
                 todoCamino = todoCamino + "      "; //Tabulación
-                for(int k = 0; k<resultado.size(); k++){
-                    if(k != resultado.size()-1){
-                        todoCamino =  todoCamino + Letras[resultado.get(k)] + "->";
-                    }
-                    else{
+                for (int k = 0; k < resultado.size(); k++) {
+                    if (k != resultado.size() - 1) {
+                        todoCamino = todoCamino + Letras[resultado.get(k)] + "->";
+                    } else {
                         todoCamino = todoCamino + Letras[resultado.get(k)] + ".";
                     }
                 }
@@ -653,7 +708,7 @@ public class FXML_MenuController implements Initializable {
                 algoritmo.limpiarCaminoFloyd();
             }
         }
-        
+
         if (!adya.isEmpty()) {
             AppContext.getInstance().set("lista", adya);
             AbrirModal("/vista/FXML_ListaAdyacencia.fxml", btnListaAdyacencia.getScene().getWindow());
@@ -662,13 +717,13 @@ public class FXML_MenuController implements Initializable {
         }
         //btnFloyd.setSelected(false);
     }
-    
-    private void obtenerDijkstraLargo(){
-        if (dijkstraLargo == true){
+
+    private void obtenerDijkstraLargo() {
+        if (dijkstraLargo == true) {
             Random aleatorio = new Random(System.currentTimeMillis());
             int intAleatorio = 0, intAleatorio2 = 0;
-            
-            while(intAleatorio == intAleatorio2){//Que no sea el mismo nodo.
+
+            while (intAleatorio == intAleatorio2) {//Que no sea el mismo nodo.
                 intAleatorio = aleatorio.nextInt(num);
                 aleatorio.setSeed(System.currentTimeMillis());
 
@@ -676,17 +731,16 @@ public class FXML_MenuController implements Initializable {
                 aleatorio.setSeed(System.currentTimeMillis());
             }
             algoritmo.dijkstraLargo(mat, intAleatorio, intAleatorio2, 0, 0);
-            
+
             CirculoSeleccionado = ListaDeConexiones.get(intAleatorio).getNodo();
             CirculoSeleccionado2 = ListaDeConexiones.get(intAleatorio2).getNodo();
-            
+
             nodo1 = 0;
             nodo2 = 0;
             NuevaLinea = null;
-            if(algoritmo.getListaResultadoDijkstra().isEmpty()){
+            if (algoritmo.getListaResultadoDijkstra().isEmpty()) {
                 obtenerDijkstraLargo();//Vuelve a buscar.
-            }
-            else{
+            } else {
                 new Thread(() -> {
                     for (int i = 0; i < algoritmo.getListaResultadoDijkstra().size(); i++) {
 
@@ -735,13 +789,13 @@ public class FXML_MenuController implements Initializable {
                         }
                     }
                 }).start();
-            }   
+            }
             dijkstraLargo = false;
             CirculoSeleccionado = null;
             CirculoSeleccionado2 = null;
         }
     }
-    
+
     EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent e) {
