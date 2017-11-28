@@ -12,6 +12,7 @@ import controladores.logica.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -108,7 +109,7 @@ public class FXML_MenuController implements Initializable {
 
     double xMouse;
     double yMouse;
-    boolean dijkstra = false;
+    boolean dijkstra = false, dijkstraLargo = false;
     boolean seleccionado = false, mover = false;// seleccionado es para determinar si se selecciono un nodo, mover es el permiso para moverlo
     boolean dobleLinea1 = false, dobleLinea2 = false;
     Node CirculoSeleccionado = null, CirculoSeleccionado2 = null, lineaSeleccionada = null;// representan los circulos para la creación de lineas
@@ -148,10 +149,17 @@ public class FXML_MenuController implements Initializable {
 
     @FXML
     private void activarFloyd(ActionEvent event) {
+        ObtenerListaFloyd();
+        
     }
-
+    
     @FXML
     private void activarCaminaLargoAleatorio(ActionEvent event) {
+        algoritmo.limpiar();
+        dijkstraLargo = true;
+        CirculoSeleccionado = null;
+        CirculoSeleccionado2 = null;
+        obtenerDijkstraLargo();
     }
 
     @FXML
@@ -218,8 +226,8 @@ public class FXML_MenuController implements Initializable {
             CirculoSeleccionado.addEventFilter(MouseEvent.MOUSE_PRESSED, eventHandler);
         }
 
-        if (btnNuevaConexion.isSelected() && cantidadNodosSeleccionados < 3 && CirculoSeleccionado != null ) {
-            if (cantidadNodosSeleccionados == 1 ) {
+        if (btnNuevaConexion.isSelected() && cantidadNodosSeleccionados < 3 && CirculoSeleccionado != null) {
+            if (cantidadNodosSeleccionados == 1) {
                 NuevaLinea = new Line();
                 NuevaLinea.setFill(Paint.valueOf("#000000"));
                 NuevaLinea.setStrokeWidth(4);
@@ -229,14 +237,14 @@ public class FXML_MenuController implements Initializable {
                 NuevaLinea.startYProperty().bind(CirculoSeleccionado.layoutYProperty().add(25));
                 CirculoSeleccionado2 = CirculoSeleccionado;
             }
-           
+
             if (cantidadNodosSeleccionados == 2) {
 
                 NuevaLinea.endXProperty().bind(CirculoSeleccionado.layoutXProperty().add(25));
                 NuevaLinea.endYProperty().bind(CirculoSeleccionado.layoutYProperty().add(25));
                 AncPanel.getChildren().remove(CirculoSeleccionado2);
                 AncPanel.getChildren().remove(CirculoSeleccionado);
-                if (CirculoSeleccionado.equals(CirculoSeleccionado2)  ) {
+                if (CirculoSeleccionado.equals(CirculoSeleccionado2)) {
 
                     for (int i = 0; i < ListaDeConexiones.size(); i++) {
                         if (ListaDeConexiones.get(i).getNodo().equals(CirculoSeleccionado)) {
@@ -284,9 +292,9 @@ public class FXML_MenuController implements Initializable {
                             }
                         }
                     }
-                    if(rdbNoDirigido.isSelected()){
-                    dobleLinea1=true;
-                    dobleLinea2=true;
+                    if (rdbNoDirigido.isSelected()) {
+                        dobleLinea1 = true;
+                        dobleLinea2 = true;
                     }
 
                     if (dobleLinea1 == true && dobleLinea2 == true) {
@@ -323,9 +331,13 @@ public class FXML_MenuController implements Initializable {
                 btnNuevaConexion.setSelected(false);
                 if (!AppContext.getInstance().get("peso").equals("")) {
                     int n = Integer.valueOf(AppContext.getInstance().get("peso").toString());
-                    if (mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] == 0) {
+                    if (mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] == 0 && rdbDirigido.isSelected()) {
                         mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] = n;
                     } else {
+                        mat[Integer.valueOf(CirculoSeleccionado.getId())][Integer.valueOf(CirculoSeleccionado2.getId())] = n;
+                    }
+                    if (mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] == 0 && rdbNoDirigido.isSelected()) {
+                        mat[Integer.valueOf(CirculoSeleccionado2.getId())][Integer.valueOf(CirculoSeleccionado.getId())] = n;
                         mat[Integer.valueOf(CirculoSeleccionado.getId())][Integer.valueOf(CirculoSeleccionado2.getId())] = n;
                     }
                 }
@@ -348,7 +360,7 @@ public class FXML_MenuController implements Initializable {
             }
             if (CirculoSeleccionado != null && CirculoSeleccionado2 != null) {
 
-                algoritmo.dijkstraCorto(mat, Integer.valueOf(CirculoSeleccionado2.getId()), Integer.valueOf(CirculoSeleccionado.getId()), Integer.MAX_VALUE);
+                algoritmo.dijkstraCorto(mat, Integer.valueOf(CirculoSeleccionado2.getId()), Integer.valueOf(CirculoSeleccionado.getId()), Integer.MAX_VALUE,0);
                 CirculoSeleccionado = null;
                 CirculoSeleccionado2 = null;
                 nodo1 = 0;
@@ -530,6 +542,7 @@ public class FXML_MenuController implements Initializable {
     @FXML
     private void ObtenerListaAdyacencia(ActionEvent event) {
         List<String> adya = new ArrayList<>();
+        adya.add("Lista de adyacencia");
         if (CirculoSeleccionado == null) {
             for (int i = 0; i < num; i++) {
                 ListaAdyacencia aux = grafo.getNodos()[i].getListaAdyacencia();
@@ -562,6 +575,120 @@ public class FXML_MenuController implements Initializable {
         btnListaAdyacencia.setSelected(false);
     }
 
+    private void ObtenerListaFloyd() {
+        List<String> adya = new ArrayList<>();
+        adya.add("Floyd (camino más corto)");
+        algoritmo.limpiar();
+        algoritmo.floyd(mat,num);
+        for(int i = 0; i<num; i++){
+            adya.add("Nodo " + String.valueOf(Letras[i]));
+            for(int j = 0; j<num; j++){
+                algoritmo.obtenerCaminoFloyd(i, j);
+                List<Integer> resultado = algoritmo.getCaminoFloyd();
+                String todoCamino = new String("");
+                adya.add("   Inicio: " + String.valueOf(Letras[i]) + "  Final: " + String.valueOf(Letras[j]));
+                todoCamino = todoCamino + "      "; //Tabulación
+                for(int k = 0; k<resultado.size(); k++){
+                    if(k != resultado.size()-1){
+                        todoCamino =  todoCamino + Letras[resultado.get(k)] + "->";
+                    }
+                    else{
+                        todoCamino = todoCamino + Letras[resultado.get(k)] + ".";
+                    }
+                }
+                adya.add(String.valueOf(todoCamino));
+                algoritmo.limpiarCaminoFloyd();
+            }
+        }
+        
+        if (!adya.isEmpty()) {
+            AppContext.getInstance().set("lista", adya);
+            AbrirModal("/vista/FXML_ListaAdyacencia.fxml", btnListaAdyacencia.getScene().getWindow());
+        } else {
+            new Alert(Alert.AlertType.ERROR, "No tiene nodos para poder realizar esta acción.", ButtonType.OK).showAndWait();
+        }
+        //btnFloyd.setSelected(false);
+    }
+    
+    private void obtenerDijkstraLargo(){
+        if (dijkstraLargo == true){
+            Random aleatorio = new Random(System.currentTimeMillis());
+            int intAleatorio = 0, intAleatorio2 = 0;
+            
+            while(intAleatorio == intAleatorio2){//Que no sea el mismo nodo.
+                intAleatorio = aleatorio.nextInt(num);
+                aleatorio.setSeed(System.currentTimeMillis());
+
+                intAleatorio2 = aleatorio.nextInt(num);
+                aleatorio.setSeed(System.currentTimeMillis());
+            }
+            algoritmo.dijkstraLargo(mat, intAleatorio, intAleatorio2, 0, 0);
+            
+            CirculoSeleccionado = ListaDeConexiones.get(intAleatorio).getNodo();
+            CirculoSeleccionado2 = ListaDeConexiones.get(intAleatorio2).getNodo();
+            
+            nodo1 = 0;
+            nodo2 = 0;
+            NuevaLinea = null;
+            if(algoritmo.getListaResultadoDijkstra().isEmpty()){
+                obtenerDijkstraLargo();//Vuelve a buscar.
+            }
+            else{
+                new Thread(() -> {
+                    for (int i = 0; i < algoritmo.getListaResultadoDijkstra().size(); i++) {
+
+                        for (int x = 0; x < ListaDeConexiones.size(); x++) {
+                            if (ListaDeConexiones.get(x).getNodo().getId().equals(String.valueOf(algoritmo.getListaResultadoDijkstra().get(i)))) {
+                                CirculoSeleccionado = ListaDeConexiones.get(x).getNodo();
+                                nodo1 = x;
+                            }
+                            if (i < algoritmo.getListaResultadoDijkstra().size() - 1 && ListaDeConexiones.get(x).getNodo().getId().equals(String.valueOf(algoritmo.getListaResultadoDijkstra().get(i + 1)))) {
+                                CirculoSeleccionado2 = ListaDeConexiones.get(x).getNodo();
+                                nodo2 = x;
+                            }
+                        }
+                        for (int a = 0; a < (ListaDeConexiones.get(nodo1).getListaConexiones().size()); a++) {
+                            for (int b = 0; b < (ListaDeConexiones.get(nodo2).getListaConexiones().size()); b++) {
+                                if (ListaDeConexiones.get(nodo1).getListaConexiones().get(a).getId().equals(ListaDeConexiones.get(nodo2).getListaConexiones().get(b).getId())) {
+                                    NuevaLinea = (Line) ListaDeConexiones.get(nodo2).getListaConexiones().get(b);
+                                }
+                            }
+                        }
+
+                        Platform.runLater(() -> {
+                            try {
+                                CambiarNodosVerdes(CirculoSeleccionado);
+
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(FXML_MenuController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        });
+
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException ex) {
+                            Logger.getLogger(FXML_MenuController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        if (i < algoritmo.getListaResultadoDijkstra().size() - 1) {
+                            NuevaLinea.setStroke(Paint.valueOf("#61b13c"));
+                        }
+                        if (i == algoritmo.getListaResultadoDijkstra().size() - 1) {
+                            try {
+                                CambiarNodosVerdes(CirculoSeleccionado2);
+                                break;
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(FXML_MenuController.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+                    }
+                }).start();
+            }   
+            dijkstraLargo = false;
+            CirculoSeleccionado = null;
+            CirculoSeleccionado2 = null;
+        }
+    }
+    
     EventHandler<MouseEvent> eventHandler = new EventHandler<MouseEvent>() {
         @Override
         public void handle(MouseEvent e) {

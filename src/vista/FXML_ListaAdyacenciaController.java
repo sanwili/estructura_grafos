@@ -6,7 +6,6 @@
 package vista;
 
 import controladores.AppContext;
-import controladores.logica.ListaAdyacencia;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -47,10 +46,10 @@ public class FXML_ListaAdyacenciaController implements Initializable {
         // TODO
         
           List<String> l = (List<String>) AppContext.getInstance().get("lista");
-          for(int i=0; i<l.size();i++){
+          for(int i=1; i<l.size();i++){
               txtLista.setText(txtLista.getText()+l.get(i)+"\n");
           }
-       
+          messageLabel.setText(l.get(0));
     }    
 
     @FXML

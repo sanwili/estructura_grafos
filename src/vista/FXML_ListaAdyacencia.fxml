@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vista.FXML_ListaAdyacenciaController">
+<AnchorPane id="AnchorPane" prefHeight="500.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vista.FXML_ListaAdyacenciaController">
    <children>
       <GridPane hgap="14.0" layoutX="10.0" layoutY="10.0" maxHeight="+Infinity" maxWidth="+Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="489.0" prefWidth="586.0" stylesheets="@AlertDialog_css/AlertDialog.css" vgap="20.0" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -27,7 +27,7 @@
             </ImageView>
             <VBox maxHeight="+Infinity" maxWidth="+Infinity" minHeight="-Infinity" prefHeight="431.0" prefWidth="412.0" spacing="1.0" GridPane.columnIndex="1" GridPane.rowIndex="0">
                <children>
-                  <Label fx:id="messageLabel" prefHeight="64.0" prefWidth="166.0" text="Lista de Adyacencia" textAlignment="LEFT" wrapText="true">
+                  <Label fx:id="messageLabel" prefHeight="64.0" prefWidth="166.0" text="Resultados" textAlignment="LEFT" wrapText="true">
                      <font>
                         <Font name="System Bold" size="18.0" />
                      </font>
