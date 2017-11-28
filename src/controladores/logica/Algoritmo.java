@@ -16,16 +16,16 @@ import java.util.Stack;
  * @author HP
  */
 public class Algoritmo {
-    Stack<Integer> pila= new Stack<Integer>();
-    List<Integer> listaResultadoDijkstra;
-    int[][] matrizFloydRecorrido;
-    int[][] matrizFloydDistancia;
-    List<Integer> listaCaminoFloyd;
-    int peso;
+    private Stack<Integer> pila;
+    private List<Integer> listaResultadoDijkstra;
+    private int[][] matrizFloydRecorrido;
+    private int[][] matrizFloydDistancia;
+    private List<Integer> listaCaminoFloyd;
+    private int peso;
     
-    boolean evaluar[];
-    int[] pesoPrim;
-    int[] nodos;
+    private boolean evaluar[];
+    private int[] pesoPrim;
+    private int[] nodos;
     
     public Algoritmo(){
         pila = new Stack<Integer>();
@@ -38,16 +38,16 @@ public class Algoritmo {
         pesoPrim = new int[15];
         nodos = new int[15];
     }
-    
-    public List<Integer>getListaResultadoDijkstra(){
-        return listaResultadoDijkstra;
-    }
     public void limpiar(){
         pila = new Stack<Integer>();
         listaResultadoDijkstra = new ArrayList<Integer>();
         peso = 0;
         matrizFloydRecorrido = new int[15][15];
         matrizFloydDistancia = new int[15][15];
+        listaCaminoFloyd = new ArrayList<Integer>();
+        evaluar = new boolean[15];
+        pesoPrim = new int[15];
+        nodos = new int[15];
     }
     public void dijkstraCorto(int[][] matrizAdyacencia, int ini, int fin, int x){
         try{
@@ -58,6 +58,7 @@ public class Algoritmo {
             if(!bandera){
                 if(ini == fin){
                     if(x < peso){
+                        listaResultadoDijkstra.clear();
                         Stack<Integer> temp = new Stack<Integer>();
                         peso = x;
                         while(!pila.empty()){
@@ -85,23 +86,27 @@ public class Algoritmo {
             
         }
     }
-    public void floyd(int[][] matrizAdyacencia){
+    public List<Integer> getListaResultadoDijkstra(){return listaResultadoDijkstra;}
+    public int[][] getMatrizFloydDistancia(){return matrizFloydDistancia;}
+    public int[][] getMatrizFloydRecorrido(){return matrizFloydRecorrido;}
+    
+    public void floyd(int[][] matrizAdyacencia, int cantidadNodos){
         //matriz de recorrido
-	for (int i = 0; i < 15; i++)
-            for (int j = 0; j < 15; j++)
+	for (int i = 0; i < cantidadNodos; i++)
+            for (int j = 0; j < cantidadNodos; j++)
             	matrizFloydRecorrido[i][j] = j;
 
 	/* Matriz de solucion(distancia) se iguala a matriz de adyacencia. */
-	for (int i = 0; i < 15; i++)
-		for (int j = 0; j < 15; j++)
+	for (int i = 0; i < cantidadNodos; i++)
+		for (int j = 0; j < cantidadNodos; j++)
 			matrizFloydDistancia[i][j] = matrizAdyacencia[i][j];
 
 	//k representa los nodos intermedios.
-	for (int k = 0; k < 15; k++) {
+	for (int k = 0; k < cantidadNodos; k++) {
 		//i representa el nodo de origen
-		for (int i = 0; i < 15; i++) {
+		for (int i = 0; i < cantidadNodos; i++) {
 			//j representa el nodo de destino.
-			for (int j = 0; j < 15; j++) {
+			for (int j = 0; j < cantidadNodos; j++) {
 				//Si el camino entre el los nodos de origen, intermedio y destino es más corto
 				//que el camino entre el nodo de origen y destino
 				if (matrizFloydDistancia[i][k] + matrizFloydDistancia[k][j] < matrizFloydDistancia[i][j]) {
@@ -114,7 +119,7 @@ public class Algoritmo {
 		}
 	}
     }
-    public void obtenerCaminoFloyd(int ini, int fin) {
+    public void obtenerCamino(int ini, int fin) {
         //Si en la matriz de recorrido, si al consultar el camino entre ini y fin el resultado es fin, es porque hay destino directo.
 	listaCaminoFloyd.add(ini);
 	if (matrizFloydRecorrido[ini][fin] == fin) {
@@ -123,9 +128,9 @@ public class Algoritmo {
 	else {
 		//Si no hay, es porque hay un nodo intermedio entre ini y fin.
 		//Se debe seguir el recorrido a partir de ahi.
-		obtenerCaminoFloyd(matrizFloydRecorrido[ini][fin], fin);
+		obtenerCamino(matrizFloydRecorrido[ini][fin], fin);
 	}
-}
+    }
     public void dijkstraLargo(int[][] matrizAdyacencia, int ini, int fin, int x){
         try{
             //Largo por pasos.
@@ -135,6 +140,7 @@ public class Algoritmo {
             if(!bandera){
                 if(ini == fin){
                     if(x > peso){
+                        listaResultadoDijkstra.clear();
                         Stack<Integer> temp = new Stack<Integer>();
                         peso = x;
                         while(!pila.empty()){
@@ -201,8 +207,9 @@ public class Algoritmo {
 			}
 		}
 	}
+        ImprimeArbol(mat, cantidadNodos);
     }
-    void imprimeArbol(int [][] matrizAdyacencia, int cantidadNodos){
+    void ImprimeArbol(int [][] matrizAdyacencia, int cantidadNodos){
 	System.out.println("Nodos   Peso\n");
 	for (int i = 1; i < cantidadNodos; i++){
             System.out.println(nodos[i] + " - " + i + "    " + matrizAdyacencia[i][nodos[i]]);
