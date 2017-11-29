@@ -787,12 +787,18 @@ public class FXML_MenuController implements Initializable {
             txtIdentificador.setPromptText("Identificador");
             txtNodoConectados.setPromptText("Nodos Conectados");
         }
-         for (int a = 0; a < (ListaDeConexiones.get(nodo1).getListaConexiones().size()); a++) {
-            for (int b = 0; b < (ListaDeConexiones.get(nodo2).getListaConexiones().size()); b++) {
-                if (ListaDeConexiones.get(nodo1).getListaConexiones().get(a).getId().equals(ListaDeConexiones.get(nodo2).getListaConexiones().get(b).getId())) {
-                    NuevaLinea = (Line) ListaDeConexiones.get(nodo2).getListaConexiones().get(b);
-                    NuevaLinea.setStroke(Paint.valueOf("#000000"));
-                }
+        
+        for (int a = 0; a < num; a++) {
+            Nodos res = ListaDeConexiones.get(a);
+            for(int b = 0; b< res.getListaConexiones().size();b++){
+               NuevaLinea = (Line) ListaDeConexiones.get(a).getListaConexiones().get(b);
+               if(false){
+                    NuevaLinea.setStroke(Paint.valueOf("#ff4444")); //Doble linea
+               }
+               else{
+                    NuevaLinea.setStroke(Paint.valueOf("#000000")); 
+               }
+               NuevaLinea = null;
             }
         }
         //Limpiar nodos
