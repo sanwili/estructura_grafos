@@ -131,7 +131,6 @@ public class Algoritmo {
                 matrizFloydRecorrido[i][j] = j;
             }
         }
-
         /* Matriz de solucion(distancia) se iguala a matriz de adyacencia. */
         for (int i = 0; i < cantidadNodos; i++) {
             for (int j = 0; j < cantidadNodos; j++) {
@@ -142,7 +141,6 @@ public class Algoritmo {
                 }
             }
         }
-
         //k representa los nodos intermedios.
         for (int k = 0; k < cantidadNodos; k++) {
             //i representa el nodo de origen

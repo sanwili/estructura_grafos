@@ -10,6 +10,7 @@
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.effect.InnerShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -24,22 +25,22 @@
 
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vista.FXML_MenuController">
    <children>
-      <BorderPane layoutX="50.0" layoutY="31.0" minHeight="700.0" minWidth="1200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <BorderPane layoutX="50.0" layoutY="31.0" minHeight="700.0" minWidth="1200.0" styleClass="pane" stylesheets="@AlertDialog_css/AlertDialog.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <top>
             <AnchorPane prefHeight="95.0" prefWidth="685.0" BorderPane.alignment="CENTER">
                <children>
-                  <Label alignment="CENTER" layoutX="469.0" layoutY="14.0" text="Graficadora de Grafos" textAlignment="CENTER" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="200.0">
+                  <Label alignment="CENTER" layoutX="469.0" layoutY="14.0" text="Graficadora de Grafos" textAlignment="CENTER" textFill="WHITE" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
                      <font>
-                        <Font size="48.0" />
+                        <Font name="Comic Sans MS" size="53.0" />
                      </font>
                   </Label>
                </children>
             </AnchorPane>
          </top>
          <right>
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="150.0" minWidth="138.0" prefHeight="450.0" prefWidth="138.0" BorderPane.alignment="CENTER">
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="150.0" minWidth="138.0" prefHeight="460.0" prefWidth="138.0" BorderPane.alignment="CENTER">
                <children>
-                  <GridPane fx:id="gridControles" layoutY="175.0" prefHeight="322.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <GridPane fx:id="gridControles" layoutY="-19.0" prefHeight="486.0" prefWidth="138.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
@@ -121,14 +122,17 @@
                            </graphic>
                         </ToggleButton>
                      </children>
+                     <effect>
+                        <InnerShadow />
+                     </effect>
                   </GridPane>
                </children>
             </AnchorPane>
          </right>
          <left>
-            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="450.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="460.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <GridPane fx:id="gridAlgoritmos" layoutX="39.0" layoutY="52.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <GridPane fx:id="gridAlgoritmos" layoutX="39.0" layoutY="52.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
@@ -223,55 +227,97 @@
                      </children>
                   </GridPane>
                </children>
+               <effect>
+                  <InnerShadow />
+               </effect>
             </AnchorPane>
          </left>
          <bottom>
             <AnchorPane prefHeight="124.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
                <children>
-                  <GridPane fx:id="gridInformación" hgap="5.0" layoutX="201.0" layoutY="-3.0" prefHeight="90.0" prefWidth="866.0" vgap="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="201.0" AnchorPane.rightAnchor="133.0" AnchorPane.topAnchor="0.0">
+                  <GridPane fx:id="gridInformación" hgap="5.0" layoutX="201.0" layoutY="-3.0" prefHeight="90.0" prefWidth="866.0" style="-fx-background-color: white;" vgap="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="201.0" AnchorPane.rightAnchor="138.0" AnchorPane.topAnchor="-10.0">
                     <columnConstraints>
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                     </columnConstraints>
                     <rowConstraints>
                       <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="43.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
+                      <RowConstraints maxHeight="49.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+                        <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="13.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
                         <Label text="Información de Nodos">
                            <font>
+                              <Font name="System Bold" size="18.0" />
+                           </font>
+                           <GridPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </GridPane.margin>
+                        </Label>
+                        <TextField fx:id="txtIdentificador" editable="false" promptText="Identificador" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </GridPane.margin>
+                           <font>
                               <Font size="14.0" />
                            </font>
-                        </Label>
-                        <TextField fx:id="txtIdentificador" editable="false" promptText="Identificador" GridPane.rowIndex="1" />
-                        <TextField fx:id="txtGradoNodo" editable="false" promptText="Grado del Nodo" GridPane.rowIndex="2" />
-                        <TextField fx:id="txtDistanciaEntreNodos" promptText="Distancia a los Nodos Conectados" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <TextField fx:id="txtNodoConectados" promptText="Nodos Conectados" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                           <effect>
+                              <DropShadow />
+                           </effect></TextField>
+                        <TextField fx:id="txtGradoNodo" editable="false" promptText="Grado del Nodo" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </GridPane.margin>
+                           <effect>
+                              <DropShadow />
+                           </effect></TextField>
+                        <TextField fx:id="txtDistanciaEntreNodos" promptText="Distancia a los Nodos Conectados" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                           <GridPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </GridPane.margin>
+                           <effect>
+                              <DropShadow />
+                           </effect></TextField>
+                        <TextField fx:id="txtNodoConectados" promptText="Nodos Conectados" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </GridPane.margin>
+                           <effect>
+                              <DropShadow />
+                           </effect></TextField>
                      </children>
+                     <effect>
+                        <InnerShadow />
+                     </effect>
                   </GridPane>
                </children>
             </AnchorPane>
          </bottom>
          <center>
-            <TabPane fx:id="tabPantallas" onMouseClicked="#CambiarPantalla" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+            <TabPane fx:id="tabPantallas" maxHeight="460.0" onMouseClicked="#CambiarPantalla" prefHeight="450.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
               <tabs>
                 <Tab fx:id="tabGrafo" text="Grafo">
                   <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
-                              <AnchorPane fx:id="AncPanel" layoutX="61.0" layoutY="14.0" maxHeight="450.0" minHeight="406.0" minWidth="421.0" onMouseClicked="#DesSeleccionar" onMouseMoved="#obtenerPosicionMouse" prefHeight="406.0" prefWidth="421.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <AnchorPane fx:id="AncPanel" layoutX="61.0" layoutY="14.0" maxHeight="450.0" minHeight="406.0" minWidth="421.0" onMouseClicked="#DesSeleccionar" onMouseMoved="#obtenerPosicionMouse" prefHeight="406.0" prefWidth="421.0" style="-fx-background-color: white;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <effect>
+                                    <InnerShadow />
+                                 </effect></AnchorPane>
                            </children>
                         </AnchorPane>
                   </content>
                 </Tab>
                 <Tab fx:id="tabMatriz" text="Matriz">
                   <content>
-                    <AnchorPane fx:id="AncMatriz" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    <AnchorPane fx:id="AncMatriz" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: white;" />
                   </content>
                 </Tab>
               </tabs>
+               <effect>
+                  <InnerShadow />
+               </effect>
             </TabPane>
          </center>
       </BorderPane>
