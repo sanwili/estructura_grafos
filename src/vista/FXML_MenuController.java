@@ -861,7 +861,7 @@ public class FXML_MenuController implements Initializable {
                     if (k != resultado.size() - 1) {
                         todoCamino = todoCamino + Letras[resultado.get(k)] + "->";
                     } else {
-                        todoCamino = todoCamino + Letras[resultado.get(k)] + ".";
+                        todoCamino = todoCamino + Letras[resultado.get(k)] + "." + " Peso:" + algoritmo.getMatrizFloydDistancia()[i][j];
                     }
                 }
                 adya.add(String.valueOf(todoCamino));
