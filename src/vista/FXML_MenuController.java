@@ -206,7 +206,7 @@ public class FXML_MenuController implements Initializable {
                     }
                 }
             }
-
+            
             NuevaLinea.setStroke(Paint.valueOf("#29f2ab"));
             CirculoSeleccionado.setStyle("-fx-background-radius: 50em; "
                     + "-fx-min-width: 50px; "
@@ -611,7 +611,7 @@ public class FXML_MenuController implements Initializable {
 
     @FXML
     private void DesSeleccionar(MouseEvent event) {
-        if (CirculoSeleccionado != null) {
+        if (CirculoSeleccionado != null) {/*
             for (int i = 0; i < ListaDeConexiones.size(); i++) {
                 if (ListaDeConexiones.get(i).getNodo().getId().equals(CirculoSeleccionado.getId()) && ListaDeConexiones.get(i).isLazo()) {
                     CirculoSeleccionado.setStyle(
@@ -634,7 +634,7 @@ public class FXML_MenuController implements Initializable {
                             + "-fx-font: 250% sans-serif;"
                     );
                 }
-            }
+            }*/
 
             txtDistanciaEntreNodos.clear();
             txtGradoNodo.clear();
@@ -646,6 +646,42 @@ public class FXML_MenuController implements Initializable {
             txtIdentificador.setPromptText("Identificador");
             txtNodoConectados.setPromptText("Nodos Conectados");
         }
+         for (int a = 0; a < (ListaDeConexiones.get(nodo1).getListaConexiones().size()); a++) {
+            for (int b = 0; b < (ListaDeConexiones.get(nodo2).getListaConexiones().size()); b++) {
+                if (ListaDeConexiones.get(nodo1).getListaConexiones().get(a).getId().equals(ListaDeConexiones.get(nodo2).getListaConexiones().get(b).getId())) {
+                    NuevaLinea = (Line) ListaDeConexiones.get(nodo2).getListaConexiones().get(b);
+                    NuevaLinea.setStroke(Paint.valueOf("#000000"));
+                }
+            }
+        }
+        //Limpiar nodos
+        for(int i = 0; i< num; i++){
+            Node circulo = ListaDeConexiones.get(i).getNodo();
+            if(ListaDeConexiones.get(i).isLazo()){
+                circulo.setStyle(
+                            "-fx-background-radius: 50em; "
+                            + "-fx-min-width: 50px; "
+                            + "-fx-min-height: 50px; "
+                            + "-fx-max-width: 50px; "
+                            + "-fx-max-height: 50px;"
+                            + "-fx-background-color:#91b13c;"
+                            + "-fx-font: 250% sans-serif;"
+                    );
+            }
+            else{
+             circulo.setStyle(
+                            "-fx-background-radius: 50em; "
+                            + "-fx-min-width: 50px; "
+                            + "-fx-min-height: 50px; "
+                            + "-fx-max-width: 50px; "
+                            + "-fx-max-height: 50px;"
+                            + "-fx-background-color:#3c7fb1;"
+                            + "-fx-font: 250% sans-serif;"
+                    );
+            }
+            
+        }
+            
     }
 
     @FXML
