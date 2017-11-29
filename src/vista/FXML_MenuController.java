@@ -741,30 +741,7 @@ public class FXML_MenuController implements Initializable {
 
     @FXML
     private void DesSeleccionar(MouseEvent event) {
-        if (CirculoSeleccionado != null) {/*
-            for (int i = 0; i < ListaDeConexiones.size(); i++) {
-                if (ListaDeConexiones.get(i).getNodo().getId().equals(CirculoSeleccionado.getId()) && ListaDeConexiones.get(i).isLazo()) {
-                    CirculoSeleccionado.setStyle(
-                            "-fx-background-radius: 50em; "
-                            + "-fx-min-width: 50px; "
-                            + "-fx-min-height: 50px; "
-                            + "-fx-max-width: 50px; "
-                            + "-fx-max-height: 50px;"
-                            + "-fx-background-color:#91b13c;"
-                            + "-fx-font: 250% sans-serif;"
-                    );
-                } else {
-                    CirculoSeleccionado.setStyle(
-                            "-fx-background-radius: 50em; "
-                            + "-fx-min-width: 50px; "
-                            + "-fx-min-height: 50px; "
-                            + "-fx-max-width: 50px; "
-                            + "-fx-max-height: 50px;"
-                            + "-fx-background-color:#3c7fb1;"
-                            + "-fx-font: 250% sans-serif;"
-                    );
-                }
-            }*/
+        if (CirculoSeleccionado != null) {
 
             txtDistanciaEntreNodos.clear();
             txtGradoNodo.clear();
