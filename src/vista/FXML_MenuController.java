@@ -137,6 +137,17 @@ public class FXML_MenuController implements Initializable {
             }
         }
         btnArbolAbarcador.disableProperty().bind(rdbDirigido.selectedProperty());
+       
+        btnListaAdyacencia.disableProperty().bind(btnNuevoNodo.selectedProperty());
+        btnEliminar.disableProperty().bind(btnNuevoNodo.selectedProperty());
+        btnMover.disableProperty().bind(btnNuevoNodo.selectedProperty());
+        btnNuevaConexion.disableProperty().bind(btnNuevoNodo.selectedProperty());
+        rdbDirigido.disableProperty().bind(btnNuevoNodo.selectedProperty());
+        rdbNoDirigido.disableProperty().bind(btnNuevoNodo.selectedProperty());
+        btnCamLargoAleatorio.disableProperty().bind(btnNuevoNodo.selectedProperty());
+       btnDiskstra.disableProperty().bind(btnNuevoNodo.selectedProperty());
+       btnFloyd.disableProperty().bind(btnNuevoNodo.selectedProperty());
+       btnArbolAbarcador.disableProperty().bind(btnNuevoNodo.selectedProperty());
     }
 
     @FXML
