@@ -17,6 +17,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -547,6 +549,7 @@ public class FXML_MenuController implements Initializable {
                         TextField t = new TextField(String.valueOf(Letras[i - 1]));
                         t.setMaxWidth(54);
                         t.setEditable(false);
+
                         matriz.add(t, j, i);
                     } else if (i == 0 && j >= 1) {
                         TextField t = new TextField(String.valueOf(Letras[j - 1]));
@@ -556,6 +559,133 @@ public class FXML_MenuController implements Initializable {
                     } else if (i >= 1 && j >= 1) {
                         TextField t = new TextField(String.valueOf(mat[i - 1][j - 1]));
                         t.setMaxWidth(54);
+                        t.setId(i + "." + j);
+                        t.textProperty().addListener(new ChangeListener<String>() {
+                            @Override
+                            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+
+                                if (!newValue.isEmpty()) {
+                                    String pos = t.getId();
+                                    boolean punto = false;
+                                    String possx = "";
+                                    String possy = "";
+
+                                    for (int i = 0; i < pos.length(); i++) {
+                                        if (punto == false && pos.charAt(i) != '.') {
+                                            possx = possx + pos.charAt(i);
+                                        } else if (pos.charAt(i) == '.') {
+                                            punto = true;
+                                            continue;
+                                        }
+                                        if (punto == true) {
+                                            possy = possy + pos.charAt(i);
+                                        }
+                                    }
+                                    try{
+                                    mat[Integer.parseInt(possx) - 1][Integer.parseInt(possy) - 1] = Integer.parseInt(newValue);
+                                    CirculoSeleccionado = ListaDeConexiones.get(Integer.parseInt(possx) - 1).getNodo();
+                                    CirculoSeleccionado2 = ListaDeConexiones.get(Integer.parseInt(possy) - 1).getNodo();
+                                    dobleLinea1 = false;
+                                    dobleLinea2 = false;
+                                    NuevaLinea = new Line();
+                                    NuevaLinea.setFill(Paint.valueOf("#000000"));
+                                    NuevaLinea.setStrokeWidth(4);
+                                    NuevaLinea.addEventFilter(MouseEvent.MOUSE_CLICKED, eventHandlerLineas);
+
+                                    NuevaLinea.startXProperty().bind(CirculoSeleccionado.layoutXProperty().add(25));
+                                    NuevaLinea.startYProperty().bind(CirculoSeleccionado.layoutYProperty().add(25));
+
+                                    NuevaLinea.endXProperty().bind(CirculoSeleccionado2.layoutXProperty().add(25));
+                                    NuevaLinea.endYProperty().bind(CirculoSeleccionado2.layoutYProperty().add(25));
+                                    AncPanel.getChildren().remove(CirculoSeleccionado2);
+                                    AncPanel.getChildren().remove(CirculoSeleccionado);
+                                    if (CirculoSeleccionado.equals(CirculoSeleccionado2)) {
+
+                                        for (int i = 0; i < ListaDeConexiones.size(); i++) {
+                                            if (ListaDeConexiones.get(i).getNodo().equals(CirculoSeleccionado)) {
+                                                if (!ListaDeConexiones.get(i).isLazo()) {
+                                                    ListaDeConexiones.get(i).setLazo(true);
+                                                    CirculoSeleccionado.setStyle(
+                                                            "-fx-background-radius: 50em; "
+                                                            + "-fx-min-width: 50px; "
+                                                            + "-fx-min-height: 50px; "
+                                                            + "-fx-max-width: 50px; "
+                                                            + "-fx-max-height: 50px;"
+                                                            + "-fx-background-color:#91b13c;"
+                                                            + "-fx-font: 150% sans-serif;"
+                                                    );
+                                                }
+                                            }
+                                        }
+                                        AncPanel.getChildren().add(CirculoSeleccionado);
+                                    } else {
+                                        Nodos n1 = new Nodos();
+                                        Nodos n2 = new Nodos();
+                                        NuevaLinea.setId(String.valueOf(cantidadLineas));
+                                        cantidadLineas++;
+                                        for (int i = 0; i < ListaDeConexiones.size(); i++) {
+                                            if (ListaDeConexiones.get(i).getNodo().equals(CirculoSeleccionado)) {
+                                                ListaDeConexiones.get(i).getListaConexiones().add(NuevaLinea);
+                                                n1 = ListaDeConexiones.get(i);
+                                            }
+                                            if (ListaDeConexiones.get(i).getNodo().equals(CirculoSeleccionado2)) {
+                                                ListaDeConexiones.get(i).getListaConexiones().add(NuevaLinea);
+                                                n2 = ListaDeConexiones.get(i);
+                                            }
+                                        }
+
+                                        for (int i = 0; i < n1.getListaConexiones().size(); i++) {
+                                            for (int j = 0; j < n2.getListaConexiones().size(); j++) {
+                                                if (n1.getListaConexiones().get(i).equals(n2.getListaConexiones().get(j))) {
+                                                    if (dobleLinea1 == false) {
+                                                        dobleLinea1 = true;
+                                                        continue;
+                                                    }
+                                                    if (dobleLinea1 == true && dobleLinea2 == false) {
+                                                        dobleLinea2 = true;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (rdbNoDirigido.isSelected()) {
+                                            dobleLinea1 = true;
+                                            dobleLinea2 = true;
+                                        }
+
+                                        if (dobleLinea1 == true && dobleLinea2 == true) {
+                                            NuevaLinea.setStroke(Paint.valueOf("#ff4444"));
+                                            NuevaLinea.setStrokeWidth(5);
+
+                                        }
+                                        CirculoSeleccionado.setStyle(
+                                                "-fx-background-radius: 50em; "
+                                                + "-fx-min-width: 50px; "
+                                                + "-fx-min-height: 50px; "
+                                                + "-fx-max-width: 50px; "
+                                                + "-fx-max-height: 50px;"
+                                                + "-fx-background-color:#3c7fb1;"
+                                                + "-fx-font: 250% sans-serif;"
+                                        );
+                                        CirculoSeleccionado2.setStyle(
+                                                "-fx-background-radius: 50em; "
+                                                + "-fx-min-width: 50px; "
+                                                + "-fx-min-height: 50px; "
+                                                + "-fx-max-width: 50px; "
+                                                + "-fx-max-height: 50px;"
+                                                + "-fx-background-color:#3c7fb1;"
+                                                + "-fx-font: 250% sans-serif;"
+                                        );
+
+                                        AncPanel.getChildren().add(NuevaLinea);
+                                        AncPanel.getChildren().add(CirculoSeleccionado2);
+                                        AncPanel.getChildren().add(CirculoSeleccionado);
+                                    }
+                                }catch(Exception e){
+                                        System.out.println(e.toString());
+                                }
+                                }
+                            }
+                        });
                         matriz.add(t, j, i);
 
                     } else {
